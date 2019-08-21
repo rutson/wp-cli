@@ -316,6 +316,13 @@ function wp_clear_object_cache() {
 function wp_get_table_names( $args, $assoc_args = array() ) {
 	global $wpdb;
 
+        // support HyperDB
+        if ( empty( $wpdb->dbname ) ) {
+                if ( isset( $wpdb->last_used_server['name'] ) ) {
+                        $wpdb->dbname = $wpdb->last_used_server['name'];
+                }
+        }
+
 	$tables = array();
 	if ( get_flag_value( $assoc_args, 'all-tables' ) ) {
 		$tables = $wpdb->get_col( 'SHOW TABLES' );
